@@ -1,5 +1,6 @@
 package no.noroff.accelerate.springassignment2;
 
+import no.noroff.accelerate.springassignment2.dataaccess.PostgradDAO;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -7,7 +8,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class SpringAssignment2Application {
 
     public static void main(String[] args) {
+
         SpringApplication.run(SpringAssignment2Application.class, args);
+        new PostgradDAO();
     }
 
 }

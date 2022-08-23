@@ -16,7 +16,9 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.postgresql:postgresql:42.4.2'
 }
+
 
 tasks.named('test') {
     useJUnitPlatform()
