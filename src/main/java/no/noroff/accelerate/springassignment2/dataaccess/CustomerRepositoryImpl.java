@@ -9,11 +9,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class CustomerRepositoryImpl implements CustomerRepository {
+public class  CustomerRepositoryImpl implements CustomerRepository {
 
     private String url = "jdbc:postgresql://localhost:5432/chinook";
     private String username = "postgres";
-    private String password = "postgres";
+    private String password = "454107";
 
     @Override
     public List<Customer> findAll() {
@@ -49,8 +49,32 @@ public class CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public int insert(Object object) {
-        return 0;
+    public Object insert(Object object) {
+        return null;
+    }
+
+    @Override
+
+    public int insert(Customer customer) {
+        String sql = "INSERT INTO customer(customer_id,first_name,last_name,country,postal_code,phone,email) VALUES (?,?,?,?,?,?,?)";
+        int result = 0;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            statement.setInt(1, customer.id());
+            statement.setString(2,customer.firstName());
+            statement.setString(3, customer.lastName());
+            statement.setString(4, customer.country());
+            statement.setString(5, customer.postalCode());
+            statement.setString(6, customer.phoneNumber());
+            statement.setString(7, customer.email());
+            // Execute statement
+            result = statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
+
     }
 
     @Override
