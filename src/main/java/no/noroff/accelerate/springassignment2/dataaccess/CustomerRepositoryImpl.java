@@ -14,7 +14,10 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
 
     private String url = "jdbc:postgresql://localhost:5432/chinook";
     private String username = "postgres";
-    private String password = "454107";
+    private String password = "postgres";
+
+    public CustomerRepositoryImpl(){
+    }
 
     @Override
     public List<Customer> findAll() {
@@ -50,6 +53,32 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public Customer findById(int id) {
+        String sql = "SELECT * FROM customer WHERE customer_id = "+id;
+        Customer customer = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            // Handle result
+            result.next();
+            customer = new Customer(
+                    result.getInt("customer_id"),
+                    result.getString("first_name"),
+                    result.getString("last_name"),
+                    result.getString("country"),
+                    result.getString("postal_code"),
+                    result.getString("phone"),
+                    result.getString("email")
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    @Override
     public Object insert(Object object) {
         return null;
     }
@@ -57,6 +86,60 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     @Override
     public ResultSet update(Object object) {
         return null;
+    }
+
+    @Override
+    public Customer findByName(String firstName) {
+        String sql = "SELECT * FROM customer WHERE first_name LIKE '"+firstName+"%'";
+        Customer customer = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            // Handle result
+            result.next();
+            customer = new Customer(
+                    result.getInt("customer_id"),
+                    result.getString("first_name"),
+                    result.getString("last_name"),
+                    result.getString("country"),
+                    result.getString("postal_code"),
+                    result.getString("phone"),
+                    result.getString("email")
+            );
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customer;
+    }
+
+    @Override
+    public List<Customer> findLimitOffset(int limit, int offset) {
+        String sql = "SELECT * FROM customer LIMIT "+limit+" OFFSET "+offset;
+        List<Customer> customers = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            // Handle result
+            while(result.next()) {
+                Customer customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
     }
 
     @Override
