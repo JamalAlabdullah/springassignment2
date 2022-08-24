@@ -114,6 +114,34 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public List<Customer> findLimitOffset(int limit, int offset) {
+        String sql = "SELECT * FROM customer LIMIT "+limit+" OFFSET "+offset;
+        List<Customer> customers = new ArrayList<>();
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            // Handle result
+            while(result.next()) {
+                Customer customer = new Customer(
+                        result.getInt("customer_id"),
+                        result.getString("first_name"),
+                        result.getString("last_name"),
+                        result.getString("country"),
+                        result.getString("postal_code"),
+                        result.getString("phone"),
+                        result.getString("email")
+                );
+                customers.add(customer);
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customers;
+    }
+
+    @Override
 
     public int insert(Customer customer) {
         String sql = "INSERT INTO customer(customer_id,first_name,last_name,country,postal_code,phone,email) VALUES (?,?,?,?,?,?,?)";

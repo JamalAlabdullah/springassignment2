@@ -1,5 +1,6 @@
 package no.noroff.accelerate.springassignment2;
 import no.noroff.accelerate.springassignment2.dataaccess.CustomerRepositoryImpl;
+import no.noroff.accelerate.springassignment2.models.Customer;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
@@ -12,6 +13,7 @@ public class SpringAssignment2Application {
         CustomerRepositoryImpl customerRepository = new CustomerRepositoryImpl();
         System.out.println(customerRepository.findById(1));
         System.out.println(customerRepository.findByName("Luís"));
+        for(Customer c : customerRepository.findLimitOffset(4,1)) System.out.println(c);
       // System.out.println(new CustomerRepositoryImpl().findAll());
         /*
         CustomerRepositoryImpl customerRepository= new CustomerRepositoryImpl();
