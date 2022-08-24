@@ -9,5 +9,6 @@ public interface CRUDRepository<T, U> {
     T insert(U object);
     ResultSet update(T object);
     int delete(T object);
+    ResultSet countryMostCustomer(T object);
     int deleteById(U id);
 }

@@ -9,6 +9,9 @@ class SpringAssignment2ApplicationTests {
 
     @Test
     void contextLoads() {
+        CustomerRepositoryImpl customerRepository= new CustomerRepositoryImpl();
+
+        System.out.println(customerRepository.countryMostCustomer(new Object()));
     }
 
 }

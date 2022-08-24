@@ -1,6 +1,7 @@
 package no.noroff.accelerate.springassignment2.dataaccess;
 
 import no.noroff.accelerate.springassignment2.models.Customer;
+import no.noroff.accelerate.springassignment2.models.CustomerCountry;
 import no.noroff.accelerate.springassignment2.repositories.CustomerRepository;
 import org.springframework.stereotype.Repository;
 
@@ -98,10 +99,41 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
         return result;
     }
 
+       /*
+        SELECT MAX (mycount)
+FROM (SELECT agent_code,COUNT(agent_code) mycount
+FROM orders
+GROUP BY agent_code);
+         */
+
+    public CustomerCountry countryMostCustomer() {
+       String sql = "SELECT country FROM   customer WHERE  country IS NOT DISTINCT FROM (SELECT MAX(country) FROM customer)";
+        CustomerCountry customerCountry = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            result.next();
+            customerCountry = new CustomerCountry(result.getString("Country"));
+            //return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerCountry;
+
+    }
+
     @Override
     public int delete(Object object) {
         return 0;
     }
+
+    @Override
+    public ResultSet countryMostCustomer(Object object) {
+        return null;
+    }
+
 
     @Override
     public int deleteById(Object id) {
