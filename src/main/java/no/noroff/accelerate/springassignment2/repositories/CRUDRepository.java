@@ -12,6 +12,8 @@ public interface CRUDRepository<T, U> {
     ResultSet update(T object);
     int delete(T object);
     ResultSet countryMostCustomer(T object);
+
+    ResultSet totalSpender(T object);
     int deleteById(U id);
 
     Customer findById(int id);

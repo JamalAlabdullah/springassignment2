@@ -1,4 +1,4 @@
 package no.noroff.accelerate.springassignment2.models;
 
-public record CustomerSpender(int customerId, double totalSpent) {
+public record CustomerSpender(String first_name,double total) {
 }
