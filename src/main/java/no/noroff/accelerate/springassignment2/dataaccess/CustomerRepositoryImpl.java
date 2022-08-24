@@ -230,29 +230,6 @@ GROUP BY agent_code);
     }
 
     public CustomerSpender totalSpender(){
-        // SELECT MAX(total) AS total_spender FROM invoice
-        //--------------------------------------------------------
-        /*
-        "SELECT customer.customer_id, customer.first_name, invoice.total AS total_spender" +
-                "         FROM customer, invoice" +
-                "         WHERE customer.customer_id = invoice.customer_id " +
-                "         GROUP BY customer.customer_id,invoice.total"
-         */
-        //_____________________________________________________________________
-        /*
-        SELECT customer_id,first_name, total_spender
-         FROM customer
-         JOIN invoice on customer.customer_id = invoice.customer_id
-         WHERE SELECT MAX(total) AS total_spender FROM invoice
-         GROUP BY customer_id
-         */
-        //------------------------------------------------------------------------
-        /*
-        SELECT ID, MAX(Total) FROM
-        (SELECT ID, Total FROM Table1 UNION ALL SELECT ID, Total FROM Table2) foo
-        GROUP BY ID
-         */
-
         String sql = "SELECT customer.customer_id, customer.first_name, invoice.total AS total_spender FROM customer \n" +
                 "LEFT OUTER JOIN invoice ON customer.customer_id= invoice.customer_id \n" +
                 "AND invoice.total = (SELECT MAX(total) FROM invoice\n" +
@@ -271,11 +248,7 @@ GROUP BY agent_code);
             e.printStackTrace();
         }
         return customerSpender;
-
-
+        
     }
-
-
-
 
 }
