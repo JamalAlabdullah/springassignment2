@@ -19,12 +19,18 @@ public class SpringAssignment2Application {
         CustomerRepositoryImpl customerRepository= new CustomerRepositoryImpl();
       customerRepository.insert(new Customer(60,
             "Jamal","Alabdullah","Norway","1111","12345678","jamal@gmail.com"));
+         */
+
+        /*
+        CustomerRepositoryImpl customerRepositoryUpdate= new CustomerRepositoryImpl();
+        customerRepositoryUpdate.update(new Object());
 
          */
 
-        //CustomerRepositoryImpl customerRepositoryUpdate= new CustomerRepositoryImpl();
-        //customerRepositoryUpdate.update(new Object());
+        CustomerRepositoryImpl CountryMost= new CustomerRepositoryImpl();
 
+
+        System.out.println(CountryMost.countryMostCustomer());
 
 
 
