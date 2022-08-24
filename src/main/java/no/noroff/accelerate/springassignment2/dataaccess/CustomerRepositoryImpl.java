@@ -54,6 +54,11 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
+    public ResultSet update(Object object) {
+        return null;
+    }
+
+    @Override
 
     public int insert(Customer customer) {
         String sql = "INSERT INTO customer(customer_id,first_name,last_name,country,postal_code,phone,email) VALUES (?,?,?,?,?,?,?)";
@@ -78,8 +83,19 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public int update(Object object) {
-        return 0;
+    public ResultSet update(Customer customer) {
+        String sql = "UPDATE Customer SET last_name='JamalJamal' WHERE customer_id=60";
+        ResultSet result = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            result = statement.executeQuery();
+            //return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return result;
     }
 
     @Override
