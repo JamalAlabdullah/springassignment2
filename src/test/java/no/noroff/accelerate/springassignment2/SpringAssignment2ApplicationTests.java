@@ -1,5 +1,6 @@
 package no.noroff.accelerate.springassignment2;
 
+import no.noroff.accelerate.springassignment2.dataaccess.CustomerRepositoryImpl;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
