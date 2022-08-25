@@ -208,6 +208,7 @@ GROUP BY agent_code);
 
     }
 
+
     @Override
     public int delete(Object object) {
         return 0;
@@ -248,7 +249,7 @@ GROUP BY agent_code);
             e.printStackTrace();
         }
         return customerSpender;
-        
+
     }
 
 }

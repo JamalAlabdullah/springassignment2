@@ -28,8 +28,8 @@ public class SpringAssignment2Application {
 
        // CustomerRepositoryImpl CountryMost= new CustomerRepositoryImpl();
        // System.out.println(CountryMost.countryMostCustomer());
-        CustomerRepositoryImpl totalSpender= new CustomerRepositoryImpl();
-        System.out.println( totalSpender.totalSpender());
+        //CustomerRepositoryImpl totalSpender= new CustomerRepositoryImpl();
+        //System.out.println( totalSpender.totalSpender());
 
 
 
