@@ -21,7 +21,6 @@ public class AppRunner implements ApplicationRunner {
         System.out.println( customerRepository.totalSpender());
         customerRepository.findAll();
         customerRepository.countryMostCustomer();
-        customerRepository.update(new Object());
         customerRepository.findById(3);
         customerRepository.findByName("Emma");
         customerRepository.findLimitOffset(4,1);
