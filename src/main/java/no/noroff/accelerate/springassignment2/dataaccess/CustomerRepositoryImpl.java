@@ -2,6 +2,7 @@ package no.noroff.accelerate.springassignment2.dataaccess;
 
 import no.noroff.accelerate.springassignment2.models.Customer;
 import no.noroff.accelerate.springassignment2.models.CustomerCountry;
+import no.noroff.accelerate.springassignment2.models.CustomerSpender;
 import no.noroff.accelerate.springassignment2.repositories.CustomerRepository;
 import org.springframework.stereotype.Repository;
 
@@ -14,7 +15,7 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
 
     private String url = "jdbc:postgresql://localhost:5432/chinook";
     private String username = "postgres";
-    private String password = "postgres";
+    private String password = "454107";
 
     public CustomerRepositoryImpl(){
     }
@@ -217,9 +218,37 @@ GROUP BY agent_code);
         return null;
     }
 
+    @Override
+    public ResultSet totalSpender(Object object) {
+        return null;
+    }
+
 
     @Override
     public int deleteById(Object id) {
         return 0;
     }
+
+    public CustomerSpender totalSpender(){
+        String sql = "SELECT customer.customer_id, customer.first_name, invoice.total AS total_spender FROM customer \n" +
+                "LEFT OUTER JOIN invoice ON customer.customer_id= invoice.customer_id \n" +
+                "AND invoice.total = (SELECT MAX(total) FROM invoice\n" +
+                "WHERE customer.customer_id= invoice.customer_id)\n" +
+                "ORDER BY invoice.total DESC";
+        CustomerSpender customerSpender = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            result.next();
+            customerSpender = new CustomerSpender(result.getString("first_name"), result.getDouble("total_spender"));
+            //return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerSpender;
+        
+    }
+
 }
