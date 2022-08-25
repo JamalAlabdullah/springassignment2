@@ -9,7 +9,6 @@ class SpringAssignment2ApplicationTests {
 
     @Test
     void contextLoads() {
-
     }
 
 }
