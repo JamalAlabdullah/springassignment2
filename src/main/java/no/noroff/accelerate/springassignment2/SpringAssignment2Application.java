@@ -30,6 +30,7 @@ public class SpringAssignment2Application {
        // System.out.println(CountryMost.countryMostCustomer());
         CustomerRepositoryImpl totalSpender= new CustomerRepositoryImpl();
         System.out.println( totalSpender.totalSpender());
+        System.out.println(totalSpender.mostPopularGenre(53));
 
 
 

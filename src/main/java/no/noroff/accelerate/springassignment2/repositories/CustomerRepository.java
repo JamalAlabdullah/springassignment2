@@ -2,6 +2,7 @@ package no.noroff.accelerate.springassignment2.repositories;
 
 import no.noroff.accelerate.springassignment2.models.Customer;
 import no.noroff.accelerate.springassignment2.models.CustomerCountry;
+import no.noroff.accelerate.springassignment2.models.CustomerGenre;
 import no.noroff.accelerate.springassignment2.models.CustomerSpender;
 
 import java.sql.ResultSet;
@@ -21,4 +22,6 @@ public interface CustomerRepository extends CRUDRepository{
     CustomerCountry countryMostCustomer();
 
     CustomerSpender totalSpender();
+
+    CustomerGenre mostPopularGenre(int id);
 }

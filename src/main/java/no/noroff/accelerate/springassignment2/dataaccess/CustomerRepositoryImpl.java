@@ -2,6 +2,7 @@ package no.noroff.accelerate.springassignment2.dataaccess;
 
 import no.noroff.accelerate.springassignment2.models.Customer;
 import no.noroff.accelerate.springassignment2.models.CustomerCountry;
+import no.noroff.accelerate.springassignment2.models.CustomerGenre;
 import no.noroff.accelerate.springassignment2.models.CustomerSpender;
 import no.noroff.accelerate.springassignment2.repositories.CustomerRepository;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
 
     private String url = "jdbc:postgresql://localhost:5432/chinook";
     private String username = "postgres";
-    private String password = "454107";
+    private String password = "postgres";
 
     public CustomerRepositoryImpl(){
     }
@@ -242,13 +243,45 @@ GROUP BY agent_code);
             // Execute statement
             ResultSet result = statement.executeQuery();
             result.next();
-            customerSpender = new CustomerSpender(result.getString("first_name"), result.getDouble("total_spender"));
+            customerSpender = new CustomerSpender(result.getInt("customer_id"),result.getString("first_name"), result.getDouble("total_spender"));
             //return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return customerSpender;
-        
     }
+
+    @Override
+    public CustomerGenre mostPopularGenre(int id){
+        String sql = "SELECT invoice.invoice_id, invoice.customer_id,genre.name,\n" +
+                "((SELECT COUNT(genre.name) AS most_genr FROM genre)),\n" +
+                "((SELECT MAX(track.name) AS track_name FROM track)),\n" +
+                "invoice.invoice_id, invoice.total\n" +
+                "FROM invoice_line,genre,track,invoice\n" +
+                "WHERE invoice.customer_id= "+id+"\n" +
+                "AND genre.genre_id= track.track_id\n" +
+                "AND invoice_line.invoice_id= invoice.invoice_id\n" +
+                "AND invoice_line.track_id= track.track_id\n" +
+                "GROUP BY invoice.invoice_id, genre.name\n" +
+                "ORDER BY COUNT(invoice.customer_id)DESC;";
+        CustomerGenre customerGenre = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            List<String> genreList = new ArrayList<String>();
+            result.next();
+            genreList.add(result.getString("name"));
+            customerGenre = new CustomerGenre(result.getInt("customer_id"), genreList);
+            while(result.next()) genreList.add(result.getString("name"));
+            //return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerGenre;
+    }
+
+
 
 }
