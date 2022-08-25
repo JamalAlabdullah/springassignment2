@@ -5,6 +5,7 @@ import no.noroff.accelerate.springassignment2.models.CustomerCountry;
 import no.noroff.accelerate.springassignment2.models.CustomerGenre;
 import no.noroff.accelerate.springassignment2.models.CustomerSpender;
 import no.noroff.accelerate.springassignment2.repositories.CustomerRepository;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
@@ -14,8 +15,11 @@ import java.util.List;
 @Repository
 public class  CustomerRepositoryImpl implements CustomerRepository {
 
+    @Value("${spring.datasource.url}")
     private String url = "jdbc:postgresql://localhost:5432/chinook";
+    @Value("${spring.datasource.username}")
     private String username = "postgres";
+    @Value("${spring.datasource.password}")
     private String password = "postgres";
 
     public CustomerRepositoryImpl(){
