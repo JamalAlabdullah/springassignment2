@@ -2,6 +2,7 @@ package no.noroff.accelerate.springassignment2.dataaccess;
 
 import no.noroff.accelerate.springassignment2.models.Customer;
 import no.noroff.accelerate.springassignment2.models.CustomerCountry;
+import no.noroff.accelerate.springassignment2.models.CustomerGenre;
 import no.noroff.accelerate.springassignment2.models.CustomerSpender;
 import no.noroff.accelerate.springassignment2.repositories.CustomerRepository;
 import org.springframework.stereotype.Repository;
@@ -15,7 +16,7 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
 
     private String url = "jdbc:postgresql://localhost:5432/chinook";
     private String username = "postgres";
-    private String password = "454107";
+    private String password = "postgres";
 
     public CustomerRepositoryImpl(){
     }
@@ -54,38 +55,7 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
     }
 
     @Override
-    public Customer findById(int id) {
-        String sql = "SELECT * FROM customer WHERE customer_id = "+id;
-        Customer customer = null;
-        try(Connection conn = DriverManager.getConnection(url, username,password)) {
-            // Write statement
-            PreparedStatement statement = conn.prepareStatement(sql);
-            // Execute statement
-            ResultSet result = statement.executeQuery();
-            // Handle result
-            result.next();
-            customer = new Customer(
-                    result.getInt("customer_id"),
-                    result.getString("first_name"),
-                    result.getString("last_name"),
-                    result.getString("country"),
-                    result.getString("postal_code"),
-                    result.getString("phone"),
-                    result.getString("email")
-            );
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return customer;
-    }
-
-    @Override
     public Object insert(Object object) {
-        return null;
-    }
-
-    @Override
-    public ResultSet update(Object object) {
         return null;
     }
 
@@ -167,29 +137,6 @@ public class  CustomerRepositoryImpl implements CustomerRepository {
 
     }
 
-    @Override
-    public ResultSet update(Customer customer) {
-        String sql = "UPDATE Customer SET last_name='JamalJamal' WHERE customer_id=60";
-        ResultSet result = null;
-        try(Connection conn = DriverManager.getConnection(url, username,password)) {
-            // Write statement
-            PreparedStatement statement = conn.prepareStatement(sql);
-            // Execute statement
-            result = statement.executeQuery();
-            //return result;
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
-
-       /*
-        SELECT MAX (mycount)
-FROM (SELECT agent_code,COUNT(agent_code) mycount
-FROM orders
-GROUP BY agent_code);
-         */
-
     public CustomerCountry countryMostCustomer() {
        String sql = "SELECT country FROM   customer WHERE  country IS NOT DISTINCT FROM (SELECT MAX(country) FROM customer)";
         CustomerCountry customerCountry = null;
@@ -209,27 +156,6 @@ GROUP BY agent_code);
     }
 
 
-    @Override
-    public int delete(Object object) {
-        return 0;
-    }
-
-    @Override
-    public ResultSet countryMostCustomer(Object object) {
-        return null;
-    }
-
-    @Override
-    public ResultSet totalSpender(Object object) {
-        return null;
-    }
-
-
-    @Override
-    public int deleteById(Object id) {
-        return 0;
-    }
-
     public CustomerSpender totalSpender(){
         String sql = "SELECT customer.customer_id, customer.first_name, invoice.total AS total_spender FROM customer \n" +
                 "LEFT OUTER JOIN invoice ON customer.customer_id= invoice.customer_id \n" +
@@ -243,13 +169,45 @@ GROUP BY agent_code);
             // Execute statement
             ResultSet result = statement.executeQuery();
             result.next();
-            customerSpender = new CustomerSpender(result.getString("first_name"), result.getDouble("total_spender"));
+            customerSpender = new CustomerSpender(result.getInt("customer_id"),result.getString("first_name"), result.getDouble("total_spender"));
             //return result;
         } catch (SQLException e) {
             e.printStackTrace();
         }
         return customerSpender;
-
     }
+
+    @Override
+    public CustomerGenre mostPopularGenre(int id){
+        String sql = "SELECT invoice.invoice_id, invoice.customer_id,genre.name,\n" +
+                "((SELECT COUNT(genre.name) AS most_genr FROM genre)),\n" +
+                "((SELECT MAX(track.name) AS track_name FROM track)),\n" +
+                "invoice.invoice_id, invoice.total\n" +
+                "FROM invoice_line,genre,track,invoice\n" +
+                "WHERE invoice.customer_id= "+id+"\n" +
+                "AND genre.genre_id= track.track_id\n" +
+                "AND invoice_line.invoice_id= invoice.invoice_id\n" +
+                "AND invoice_line.track_id= track.track_id\n" +
+                "GROUP BY invoice.invoice_id, genre.name\n" +
+                "ORDER BY COUNT(invoice.customer_id)DESC;";
+        CustomerGenre customerGenre = null;
+        try(Connection conn = DriverManager.getConnection(url, username,password)) {
+            // Write statement
+            PreparedStatement statement = conn.prepareStatement(sql);
+            // Execute statement
+            ResultSet result = statement.executeQuery();
+            List<String> genreList = new ArrayList<String>();
+            result.next();
+            genreList.add(result.getString("name"));
+            customerGenre = new CustomerGenre(result.getInt("customer_id"), genreList);
+            while(result.next()) genreList.add(result.getString("name"));
+            //return result;
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return customerGenre;
+    }
+
+
 
 }

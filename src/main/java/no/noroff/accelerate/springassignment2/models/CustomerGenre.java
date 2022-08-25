@@ -1,4 +1,6 @@
 package no.noroff.accelerate.springassignment2.models;
 
-public record CustomerGenre(int customerId, int genreId) {
+import java.util.List;
+
+public record CustomerGenre(int customerId, List<String> genreName) {
 }
