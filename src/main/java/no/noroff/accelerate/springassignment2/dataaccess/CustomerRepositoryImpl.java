@@ -16,11 +16,11 @@ import java.util.List;
 public class  CustomerRepositoryImpl implements CustomerRepository {
 
     @Value("${spring.datasource.url}")
-    private String url = "jdbc:postgresql://localhost:5432/chinook";
+    private String url;
     @Value("${spring.datasource.username}")
-    private String username = "postgres";
+    private String username;
     @Value("${spring.datasource.password}")
-    private String password = "postgres";
+    private String password;
 
     public CustomerRepositoryImpl(){
     }
