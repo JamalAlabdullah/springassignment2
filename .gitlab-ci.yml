@@ -1,5 +1,15 @@
-Stages:
+image: gradle:alpine
+stages:
   - build
 
 build:
-  - stage: build
+  stage: build
+  script: gradle --build-cache assemble
+  artifacts:
+    when: always
+    paths:
+      - build/libs/*.jar
+
+  only:
+    - main
+    - merge_requests
